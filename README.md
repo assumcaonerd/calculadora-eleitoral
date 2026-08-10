@@ -8,6 +8,22 @@ Serve para estimar a **viabilidade real** de um candidato a cargo proporcional (
 2. **1ª fase de sobras** (partido ≥ 80% do QE + candidato ≥ 20% do QE)
 3. **Fase final de sobras** (aberta a todos os partidos, conforme decisão do STF)
 
+## Interface web (mais fácil de usar)
+
+Abra o arquivo no navegador:
+
+```
+docs/index.html
+```
+
+Ou, se preferir servir localmente:
+
+```bash
+npx serve docs
+```
+
+A página é auto-contida (HTML + CSS + JavaScript). Não precisa de build nem de internet depois de aberta.
+
 ## Base legal atualizada
 
 - Código Eleitoral (Lei 4.737/1965), arts. 106 a 109 e 111
@@ -26,22 +42,22 @@ Serve para estimar a **viabilidade real** de um candidato a cargo proporcional (
 O Quociente Eleitoral é calculado conforme o art. 9º da Res. TSE 23.677:  
 votos válidos ÷ vagas, **desprezando a fração se ≤ 0,5** ou **arredondando para 1 se superior**.
 
-## Como usar
+## Uso via código (TypeScript / Node)
 
-### 1. Instalação
+### Instalação
 
 ```bash
 npm install
 npm run build
 ```
 
-### 2. Executar o exemplo
+### Executar o exemplo
 
 ```bash
 npm start
 ```
 
-### 3. Usar no seu código
+### Usar no seu código
 
 ```ts
 import { calcularBasico } from "./dist/engine/calc.js";

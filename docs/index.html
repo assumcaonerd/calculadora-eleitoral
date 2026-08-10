@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Eleitoral – Sistema Proporcional</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --card: #ffffff;
+      --text: #1a1a1a;
+      --muted: #555;
+      --border: #d0d7de;
+      --primary: #0b5fff;
+      --primary-hover: #094bcc;
+      --success: #0a7a3e;
+      --warning: #9a6700;
+      --danger: #b42318;
+      --info: #0550ae;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 24px 16px 48px;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 28px;
+    }
+
+    header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    header p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    .card h2 {
+      font-size: 1.1rem;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media (max-width: 560px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 4px;
+      color: var(--muted);
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 1rem;
+      background: #fff;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(11, 95, 255, 0.15);
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    .hint {
+      font-size: 0.8rem;
+      color: #777;
+      margin-top: 3px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 11px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background: #eef1f4;
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background: #e2e6ea;
+    }
+
+    #resultado {
+      display: none;
+    }
+
+    #resultado.visible {
+      display: block;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .badge-diretas {
+      background: #d1f7d6;
+      color: var(--success);
+    }
+
+    .badge-sobras1 {
+      background: #fff3cd;
+      color: var(--warning);
+    }
+
+    .badge-sobras2 {
+      background: #dbeafe;
+      color: var(--info);
+    }
+
+    .badge-nenhuma {
+      background: #fce8e6;
+      color: var(--danger);
+    }
+
+    .nums {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .num-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .num-box .label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .num-box .value {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .explicacao {
+      margin-top: 8px;
+    }
+
+    .explicacao li {
+      margin-bottom: 8px;
+      padding-left: 4px;
+    }
+
+    .base-legal {
+      margin-top: 16px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .base-legal ul {
+      margin-top: 6px;
+      padding-left: 18px;
+    }
+
+    footer {
+      margin-top: 32px;
+      font-size: 0.8rem;
+      color: #777;
+      text-align: center;
+    }
+
+    .aviso {
+      background: #fff8e6;
+      border: 1px solid #f0d78c;
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 0.85rem;
+      color: #6b5200;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Calculadora Eleitoral</h1>
+      <p>Estime a viabilidade de um candidato no sistema proporcional brasileiro (vagas diretas e sobras).</p>
+    </header>
+
+    <div class="card">
+      <h2>Dados da simulação</h2>
+      <form id="form">
+        <div class="grid">
+          <div>
+            <label for="uf">UF / Município (opcional)</label>
+            <input type="text" id="uf" placeholder="Ex: ES" value="ES" />
+          </div>
+          <div>
+            <label for="cargo">Cargo</label>
+            <select id="cargo">
+              <option value="depestadual" selected>Deputado Estadual</option>
+              <option value="depfederal">Deputado Federal</option>
+              <option value="vereador">Vereador</option>
+            </select>
+          </div>
+          <div>
+            <label for="vagas">Número de vagas</label>
+            <input type="number" id="vagas" min="1" value="30" required />
+            <div class="hint">Ex: 30 (ES estadual), 10 (ES federal)</div>
+          </div>
+          <div>
+            <label for="votosValidos">Votos válidos totais</label>
+            <input type="number" id="votosValidos" min="1" value="2300000" required />
+            <div class="hint">Nominais + legenda do cargo</div>
+          </div>
+          <div>
+            <label for="partidoVotos">Votos do partido / federação</label>
+            <input type="number" id="partidoVotos" min="0" value="95000" required />
+          </div>
+          <div>
+            <label for="candidatoVotos">Votos do candidato</label>
+            <input type="number" id="candidatoVotos" min="0" value="12000" required />
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn-primary">Calcular</button>
+          <button type="button" class="btn-secondary" id="btnLimpar">Limpar</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card" id="resultado">
+      <h2>Resultado</h2>
+      <div id="badge"></div>
+      <div class="nums" id="nums"></div>
+      <ol class="explicacao" id="explicacao"></ol>
+      <div class="aviso">
+        Esta é uma estimativa de elegibilidade mínima. A ocupação efetiva das sobras depende das médias de todos os partidos e da ordem de votação nominal dentro da legenda.
+      </div>
+      <div class="base-legal">
+        <strong>Base legal:</strong>
+        <ul id="baseLegal"></ul>
+      </div>
+    </div>
+
+    <footer>
+      Calculadora Eleitoral · Sistema proporcional brasileiro · Regras atualizadas para 2026<br />
+      Código Eleitoral + Res. TSE 23.677/2021 (com alterações) + STF ADI 7.228
+    </footer>
+  </div>
+
+  <script>
+    // ===== Motor de cálculo (mesmas regras do TypeScript) =====
+    function calcularQE(votosValidos, vagas) {
+      if (vagas <= 0) return 0;
+      const cru = votosValidos / vagas;
+      const inteiro = Math.floor(cru);
+      const fracao = cru - inteiro;
+      return fracao > 0.5 ? inteiro + 1 : inteiro;
+    }
+
+    function minimo10(qe) { return Math.ceil(qe * 0.1); }
+    function minimo20(qe) { return Math.ceil(qe * 0.2); }
+    function limiar80(qe) { return Math.ceil(qe * 0.8); }
+    function calcularQP(partidoVotos, qe) {
+      if (qe <= 0) return 0;
+      return Math.floor(partidoVotos / qe);
+    }
+
+    function calcular(input) {
+      const { votosValidos, vagas, partidoVotos, candidatoVotos } = input;
+
+      const qe = calcularQE(votosValidos, vagas);
+      const qp = calcularQP(partidoVotos, qe);
+      const min10 = minimo10(qe);
+      const min20 = minimo20(qe);
+      const lim80 = limiar80(qe);
+
+      const partidoAtingiuQE = qp >= 1;
+      const partidoAtingiu80 = partidoVotos >= lim80;
+      const candidatoAtinge10 = candidatoVotos >= min10;
+      const candidatoAtinge20 = candidatoVotos >= min20;
+
+      const explicacao = [];
+      const baseLegal = [
+        "Art. 106 a 109 do Código Eleitoral",
+        "Arts. 5º e 6º-A da Lei 9.504/1997",
+        "Res. TSE 23.677/2021 (alterada pelas Res. 23.734/2024 e 23.748/2026)",
+        "STF, ADI 7.228 (fase final de sobras aberta a todos os partidos)"
+      ];
+
+      explicacao.push(`Quociente Eleitoral (QE): ${qe.toLocaleString("pt-BR")} votos.`);
+      explicacao.push(`Quociente Partidário (QP) do partido/federação: ${qp} vaga(s).`);
+      explicacao.push(`Mínimo individual 10% do QE: ${min10.toLocaleString("pt-BR")} votos.`);
+      explicacao.push(`Mínimo individual 20% do QE: ${min20.toLocaleString("pt-BR")} votos.`);
+      explicacao.push(`Limiar partidário 80% do QE (1ª fase de sobras): ${lim80.toLocaleString("pt-BR")} votos.`);
+
+      let etapa = "nenhuma";
+
+      if (partidoAtingiuQE && candidatoAtinge10) {
+        etapa = "vagas_diretas";
+        explicacao.push("O partido atingiu o quociente partidário e o candidato alcançou 10% do QE. Há chance real de ocupação de vaga direta (na ordem de votação nominal da legenda).");
+      } else if (partidoAtingiuQE && !candidatoAtinge10) {
+        explicacao.push("O partido fez o quociente, mas o candidato não atingiu 10% do QE. Não ocupa vaga direta. Pode disputar sobras se cumprir os requisitos da etapa seguinte.");
+      } else {
+        explicacao.push("O partido não atingiu o quociente partidário (QP = 0). Não há vaga direta.");
+      }
+
+      if (etapa === "nenhuma" || etapa === "vagas_diretas") {
+        if (partidoAtingiu80 && candidatoAtinge20) {
+          if (etapa === "nenhuma") etapa = "sobras_1";
+          explicacao.push("Partido ≥ 80% do QE e candidato ≥ 20% do QE: apto a disputar a 1ª fase de sobras (distribuição por média).");
+        } else {
+          if (!partidoAtingiu80) {
+            explicacao.push(`O partido não atingiu 80% do QE (${lim80.toLocaleString("pt-BR")}). Não participa da 1ª fase de sobras.`);
+          }
+          if (!candidatoAtinge20) {
+            explicacao.push(`O candidato não atingiu 20% do QE (${min20.toLocaleString("pt-BR")}). Não preenche requisito individual da 1ª fase de sobras.`);
+          }
+        }
+      }
+
+      if (etapa === "nenhuma") {
+        etapa = "sobras_2";
+        explicacao.push("Na fase final de sobras (quando ainda restam vagas após a 1ª distribuição por média), todos os partidos podem concorrer. O candidato concorre pela ordem de votação da legenda, sem a cláusula 80/20.");
+      } else if (etapa === "sobras_1") {
+        explicacao.push("Se não houver vaga na 1ª fase de sobras, ainda resta a fase final (aberta a todos os partidos).");
+      }
+
+      explicacao.push("Atenção: esta é uma estimativa de elegibilidade mínima. A ocupação efetiva das sobras depende das médias de todos os partidos e da ordem de votação nominal dentro da legenda.");
+
+      return {
+        qe, qp, minimo10: min10, minimo20: min20, limiar80: lim80,
+        partidoAtingiuQE, partidoAtingiu80,
+        candidatoAtinge10, candidatoAtinge20,
+        etapaPossivel: etapa,
+        explicacao, baseLegal
+      };
+    }
+
+    // ===== Interface =====
+    const form = document.getElementById("form");
+    const resultadoEl = document.getElementById("resultado");
+    const badgeEl = document.getElementById("badge");
+    const numsEl = document.getElementById("nums");
+    const explicacaoEl = document.getElementById("explicacao");
+    const baseLegalEl = document.getElementById("baseLegal");
+
+    const labelsEtapa = {
+      vagas_diretas: { texto: "Chance de vaga direta", classe: "badge-diretas" },
+      sobras_1: { texto: "Apto à 1ª fase de sobras", classe: "badge-sobras1" },
+      sobras_2: { texto: "Chance apenas na fase final de sobras", classe: "badge-sobras2" },
+      nenhuma: { texto: "Sem elegibilidade mínima aparente", classe: "badge-nenhuma" }
+    };
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const input = {
+        vagas: Number(document.getElementById("vagas").value),
+        votosValidos: Number(document.getElementById("votosValidos").value),
+        partidoVotos: Number(document.getElementById("partidoVotos").value),
+        candidatoVotos: Number(document.getElementById("candidatoVotos").value)
+      };
+
+      if (input.vagas <= 0 || input.votosValidos <= 0) {
+        alert("Informe número de vagas e votos válidos maiores que zero.");
+        return;
+      }
+
+      const r = calcular(input);
+
+      // Badge
+      const info = labelsEtapa[r.etapaPossivel] || labelsEtapa.nenhuma;
+      badgeEl.innerHTML = `<span class="badge ${info.classe}">${info.texto}</span>`;
+
+      // Números
+      numsEl.innerHTML = `
+        <div class="num-box"><div class="label">QE</div><div class="value">${r.qe.toLocaleString("pt-BR")}</div></div>
+        <div class="num-box"><div class="label">QP do partido</div><div class="value">${r.qp}</div></div>
+        <div class="num-box"><div class="label">Mín. 10%</div><div class="value">${r.minimo10.toLocaleString("pt-BR")}</div></div>
+        <div class="num-box"><div class="label">Mín. 20%</div><div class="value">${r.minimo20.toLocaleString("pt-BR")}</div></div>
+        <div class="num-box"><div class="label">Limiar 80%</div><div class="value">${r.limiar80.toLocaleString("pt-BR")}</div></div>
+      `;
+
+      // Explicação
+      explicacaoEl.innerHTML = r.explicacao.map(t => `<li>${t}</li>`).join("");
+
+      // Base legal
+      baseLegalEl.innerHTML = r.baseLegal.map(t => `<li>${t}</li>`).join("");
+
+      resultadoEl.classList.add("visible");
+      resultadoEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    document.getElementById("btnLimpar").addEventListener("click", function () {
+      form.reset();
+      document.getElementById("uf").value = "ES";
+      document.getElementById("vagas").value = 30;
+      document.getElementById("votosValidos").value = 2300000;
+      document.getElementById("partidoVotos").value = 95000;
+      document.getElementById("candidatoVotos").value = 12000;
+      resultadoEl.classList.remove("visible");
+    });
+  </script>
+</body>
+</html>
