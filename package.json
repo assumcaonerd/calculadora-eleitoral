@@ -1,20 +1,22 @@
 {
   "name": "calculadora-eleitoral",
-  "version": "0.1.0",
-  "description": "Motor de cálculo do sistema proporcional brasileiro (quociente eleitoral, quociente partidário e sobras)",
+  "version": "0.2.0",
+  "description": "Motor de cálculo do sistema proporcional brasileiro (quociente eleitoral, quociente partidário e sobras), atualizado com a legislação vigente para 2026",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "node --test dist/tests/engine.test.js",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "test": "node --test dist/tests/engine.test.js"
   },
   "keywords": [
     "quociente-eleitoral",
     "direito-eleitoral",
     "sistema-proporcional",
     "eleições",
-    "brasil"
+    "brasil",
+    "sobras",
+    "tse"
   ],
   "author": "assumcaonerd",
   "license": "MIT",

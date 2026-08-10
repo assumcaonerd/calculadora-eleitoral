@@ -1,41 +1,52 @@
 export type Cargo = "depestadual" | "depfederal" | "vereador";
 
-export type Etapa = "vagas_diretas" | "sobras_1" | "sobras_2";
+/**
+ * Etapas de ocupação de vaga no sistema proporcional:
+ * - vagas_diretas: partido atingiu QP e candidato tem ≥ 10% do QE
+ * - sobras_1: 1ª fase de sobras (partido ≥ 80% QE e candidato ≥ 20% QE)
+ * - sobras_2: fase final (aberta a todos os partidos, conforme STF ADI 7228)
+ * - nenhuma: não atende os mínimos das etapas aplicáveis
+ */
+export type Etapa = "vagas_diretas" | "sobras_1" | "sobras_2" | "nenhuma";
 
 export type EntradaCalculo = {
-  uf: string;
-  cargo: Cargo;
+  /** UF ou município (apenas informativo). */
+  uf?: string;
+  cargo?: Cargo;
 
-  // número de cadeiras no estado/município
+  /** Número de cadeiras em disputa. */
   vagas: number;
 
-  // votos válidos totais (para aquele cargo e UF)
+  /** Total de votos válidos (nominais + legenda) para o cargo. */
   votosValidos: number;
 
-  // votos totais do partido/federação naquele cargo/UF
+  /** Votos totais do partido ou federação (nominais + legenda). */
   partidoVotos: number;
 
-  // votos do candidato
+  /** Votos nominais do candidato. */
   candidatoVotos: number;
-
-  // opcional: se o partido alcançou 1 QE (pode ser inferido)
-  partidoFezQE?: boolean;
 };
 
 export type ResultadoCalculo = {
   qe: number;
+  qp: number;
   minimo10: number;
   minimo20: number;
+  limiar80: number;
 
-  partidoFezQE: boolean;
+  partidoAtingiuQE: boolean;
+  partidoAtingiu80: boolean;
   vagasDiretasDoPartido: number;
 
+  candidatoAtinge10: boolean;
+  candidatoAtinge20: boolean;
+
+  /** Etapa mais favorável em que o candidato ainda tem chance real. */
   etapaPossivel: Etapa;
 
-  elegibilidadeMinima: {
-    atende10: boolean;
-    atende20: boolean;
-  };
+  /** Resumo em linguagem simples para o usuário. */
+  explicacao: string[];
 
-  explicacaoCurta: string[];
+  /** Referências legais resumidas. */
+  baseLegal: string[];
 };
