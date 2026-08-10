@@ -18,229 +18,69 @@
       --danger: #b42318;
       --info: #0550ae;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-      padding: 24px 16px 48px;
+      background: var(--bg); color: var(--text); line-height: 1.5; padding: 24px 16px 48px;
     }
-
-    .container {
-      max-width: 720px;
-      margin: 0 auto;
-    }
-
-    header {
-      margin-bottom: 28px;
-    }
-
-    header h1 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    header p {
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
+    .container { max-width: 720px; margin: 0 auto; }
+    header { margin-bottom: 28px; }
+    header h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 6px; }
+    header p { color: var(--muted); font-size: 0.95rem; }
     .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 24px;
-      margin-bottom: 20px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,0.04);
     }
-
-    .card h2 {
-      font-size: 1.1rem;
-      margin-bottom: 16px;
-      font-weight: 600;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    @media (max-width: 560px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    label {
-      display: block;
-      font-size: 0.85rem;
-      font-weight: 500;
-      margin-bottom: 4px;
-      color: var(--muted);
-    }
-
+    .card h2 { font-size: 1.1rem; margin-bottom: 16px; font-weight: 600; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+    label { display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 4px; color: var(--muted); }
     input, select {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 1rem;
-      background: #fff;
+      width: 100%; padding: 10px 12px; border: 1px solid var(--border);
+      border-radius: 6px; font-size: 1rem; background: #fff;
     }
-
     input:focus, select:focus {
-      outline: none;
-      border-color: var(--primary);
+      outline: none; border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(11, 95, 255, 0.15);
     }
-
-    .hint {
-      font-size: 0.8rem;
-      color: #777;
-      margin-top: 3px;
-    }
-
-    .actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 18px;
-      flex-wrap: wrap;
-    }
-
+    .hint { font-size: 0.8rem; color: #777; margin-top: 3px; }
+    .actions { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
     button {
-      padding: 11px 20px;
-      border: none;
-      border-radius: 6px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
+      padding: 11px 20px; border: none; border-radius: 6px;
+      font-size: 0.95rem; font-weight: 600; cursor: pointer;
     }
-
-    .btn-primary {
-      background: var(--primary);
-      color: #fff;
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-hover);
-    }
-
-    .btn-secondary {
-      background: #eef1f4;
-      color: var(--text);
-    }
-
-    .btn-secondary:hover {
-      background: #e2e6ea;
-    }
-
-    #resultado {
-      display: none;
-    }
-
-    #resultado.visible {
-      display: block;
-    }
-
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-secondary { background: #eef1f4; color: var(--text); }
+    .btn-secondary:hover { background: #e2e6ea; }
+    #resultado { display: none; }
+    #resultado.visible { display: block; }
     .badge {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin-bottom: 12px;
+      display: inline-block; padding: 4px 10px; border-radius: 999px;
+      font-size: 0.8rem; font-weight: 600; margin-bottom: 12px;
     }
-
-    .badge-diretas {
-      background: #d1f7d6;
-      color: var(--success);
-    }
-
-    .badge-sobras1 {
-      background: #fff3cd;
-      color: var(--warning);
-    }
-
-    .badge-sobras2 {
-      background: #dbeafe;
-      color: var(--info);
-    }
-
-    .badge-nenhuma {
-      background: #fce8e6;
-      color: var(--danger);
-    }
-
+    .badge-diretas { background: #d1f7d6; color: var(--success); }
+    .badge-sobras1 { background: #fff3cd; color: var(--warning); }
+    .badge-sobras2 { background: #dbeafe; color: var(--info); }
+    .badge-nenhuma { background: #fce8e6; color: var(--danger); }
     .nums {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 10px;
-      margin: 16px 0;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px; margin: 16px 0;
     }
-
     .num-box {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px;
-      text-align: center;
+      background: #f8fafc; border: 1px solid var(--border); border-radius: 8px;
+      padding: 12px; text-align: center;
     }
-
-    .num-box .label {
-      font-size: 0.75rem;
-      color: var(--muted);
-      margin-bottom: 2px;
-    }
-
-    .num-box .value {
-      font-size: 1.15rem;
-      font-weight: 700;
-    }
-
-    .explicacao {
-      margin-top: 8px;
-    }
-
-    .explicacao li {
-      margin-bottom: 8px;
-      padding-left: 4px;
-    }
-
-    .base-legal {
-      margin-top: 16px;
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-
-    .base-legal ul {
-      margin-top: 6px;
-      padding-left: 18px;
-    }
-
-    footer {
-      margin-top: 32px;
-      font-size: 0.8rem;
-      color: #777;
-      text-align: center;
-    }
-
+    .num-box .label { font-size: 0.75rem; color: var(--muted); margin-bottom: 2px; }
+    .num-box .value { font-size: 1.15rem; font-weight: 700; }
+    .explicacao { margin-top: 8px; }
+    .explicacao li { margin-bottom: 8px; padding-left: 4px; }
+    .base-legal { margin-top: 16px; font-size: 0.85rem; color: var(--muted); }
+    .base-legal ul { margin-top: 6px; padding-left: 18px; }
+    footer { margin-top: 32px; font-size: 0.8rem; color: #777; text-align: center; }
     .aviso {
-      background: #fff8e6;
-      border: 1px solid #f0d78c;
-      border-radius: 8px;
-      padding: 12px 14px;
-      font-size: 0.85rem;
-      color: #6b5200;
-      margin-top: 16px;
+      background: #fff8e6; border: 1px solid #f0d78c; border-radius: 8px;
+      padding: 12px 14px; font-size: 0.85rem; color: #6b5200; margin-top: 16px;
     }
   </style>
 </head>
@@ -248,7 +88,7 @@
   <div class="container">
     <header>
       <h1>Calculadora Eleitoral</h1>
-      <p>Estime a viabilidade de um candidato no sistema proporcional brasileiro (vagas diretas e sobras).</p>
+      <p>Estime a viabilidade de um candidato no sistema proporcional brasileiro com dados reais de 2022.</p>
     </header>
 
     <div class="card">
@@ -256,26 +96,26 @@
       <form id="form">
         <div class="grid">
           <div>
-            <label for="uf">UF / Município (opcional)</label>
-            <input type="text" id="uf" placeholder="Ex: ES" value="ES" />
+            <label for="uf">Estado / DF</label>
+            <select id="uf"></select>
+            <div class="hint">Dados oficiais de votos válidos de 2022 (TSE)</div>
           </div>
           <div>
             <label for="cargo">Cargo</label>
             <select id="cargo">
-              <option value="depestadual" selected>Deputado Estadual</option>
+              <option value="depestadual" selected>Deputado Estadual / Distrital</option>
               <option value="depfederal">Deputado Federal</option>
-              <option value="vereador">Vereador</option>
             </select>
           </div>
           <div>
             <label for="vagas">Número de vagas</label>
-            <input type="number" id="vagas" min="1" value="30" required />
-            <div class="hint" id="hintVagas">Ex: 30 (ES estadual), 10 (ES federal)</div>
+            <input type="number" id="vagas" min="1" required />
+            <div class="hint" id="hintVagas">Preenchido automaticamente</div>
           </div>
           <div>
             <label for="votosValidos">Votos válidos totais</label>
-            <input type="number" id="votosValidos" min="1" value="2300000" required />
-            <div class="hint">Nominais + legenda do cargo</div>
+            <input type="number" id="votosValidos" min="1" required />
+            <div class="hint">Padrão: total de 2022 (pode alterar para projetar 2026)</div>
           </div>
           <div>
             <label for="partidoVotos">Votos do partido / federação</label>
@@ -300,7 +140,7 @@
       <div class="nums" id="nums"></div>
       <ol class="explicacao" id="explicacao"></ol>
       <div class="aviso">
-        Esta é uma estimativa de elegibilidade mínima. A ocupação efetiva das sobras depende das médias de todos os partidos e da ordem de votação nominal dentro da legenda.
+        Esta é uma estimativa de elegibilidade mínima com base nos votos válidos de 2022. A ocupação efetiva das sobras depende das médias de todos os partidos e da ordem de votação nominal dentro da legenda. Você pode ajustar os votos válidos para projetar cenários de 2026.
       </div>
       <div class="base-legal">
         <strong>Base legal:</strong>
@@ -309,35 +149,42 @@
     </div>
 
     <footer>
-      Calculadora Eleitoral · Sistema proporcional brasileiro · Regras atualizadas para 2026<br />
+      Calculadora Eleitoral · Sistema proporcional brasileiro · Dados de votos válidos: Eleições 2022 (TSE)<br />
       Código Eleitoral + Res. TSE 23.677/2021 (com alterações) + STF ADI 7.228
     </footer>
   </div>
 
   <script>
-    // ===== Exemplos prontos por cargo (valores aproximados para o ES) =====
-    const exemplos = {
-      depestadual: {
-        vagas: 30,
-        votosValidos: 2300000,
-        partidoVotos: 95000,
-        candidatoVotos: 12000,
-        hint: "Ex: 30 vagas no Espírito Santo"
-      },
-      depfederal: {
-        vagas: 10,
-        votosValidos: 2300000,
-        partidoVotos: 180000,
-        candidatoVotos: 35000,
-        hint: "Ex: 10 vagas no Espírito Santo"
-      },
-      vereador: {
-        vagas: 15,
-        votosValidos: 180000,
-        partidoVotos: 12000,
-        candidatoVotos: 1800,
-        hint: "Exemplo genérico de município médio"
-      }
+    // Dados oficiais 2022 – votos válidos para Deputado Federal (TSE)
+    // Fonte: Informação SMG nº 8/2023 do TSE
+    const dados2022 = {
+      AC: { nome: "Acre", federal: 8, estadual: 24, votos: 434253 },
+      AL: { nome: "Alagoas", federal: 9, estadual: 27, votos: 1650763 },
+      AM: { nome: "Amazonas", federal: 8, estadual: 24, votos: 1976477 },
+      AP: { nome: "Amapá", federal: 8, estadual: 24, votos: 423017 },
+      BA: { nome: "Bahia", federal: 39, estadual: 63, votos: 7958431 },
+      CE: { nome: "Ceará", federal: 22, estadual: 46, votos: 5108239 },
+      DF: { nome: "Distrito Federal", federal: 8, estadual: 24, votos: 1607519 },
+      ES: { nome: "Espírito Santo", federal: 10, estadual: 30, votos: 2084430 },
+      GO: { nome: "Goiás", federal: 17, estadual: 41, votos: 3439644 },
+      MA: { nome: "Maranhão", federal: 18, estadual: 42, votos: 3706498 },
+      MG: { nome: "Minas Gerais", federal: 53, estadual: 77, votos: 11181098 },
+      MS: { nome: "Mato Grosso do Sul", federal: 8, estadual: 24, votos: 1374808 },
+      MT: { nome: "Mato Grosso", federal: 8, estadual: 24, votos: 1730277 },
+      PA: { nome: "Pará", federal: 17, estadual: 41, votos: 4521516 },
+      PB: { nome: "Paraíba", federal: 12, estadual: 36, votos: 2207935 },
+      PE: { nome: "Pernambuco", federal: 25, estadual: 49, votos: 4969863 },
+      PI: { nome: "Piauí", federal: 10, estadual: 30, votos: 1957483 },
+      PR: { nome: "Paraná", federal: 30, estadual: 54, votos: 6038642 },
+      RJ: { nome: "Rio de Janeiro", federal: 46, estadual: 70, votos: 8575988 },
+      RN: { nome: "Rio Grande do Norte", federal: 8, estadual: 24, votos: 1864825 },
+      RO: { nome: "Rondônia", federal: 8, estadual: 24, votos: 869148 },
+      RR: { nome: "Roraima", federal: 8, estadual: 24, votos: 291714 },
+      RS: { nome: "Rio Grande do Sul", federal: 31, estadual: 55, votos: 6149822 },
+      SC: { nome: "Santa Catarina", federal: 16, estadual: 40, votos: 3969848 },
+      SE: { nome: "Sergipe", federal: 8, estadual: 24, votos: 1191617 },
+      SP: { nome: "São Paulo", federal: 70, estadual: 94, votos: 23294479 },
+      TO: { nome: "Tocantins", federal: 8, estadual: 24, votos: 830140 }
     };
 
     // ===== Motor de cálculo =====
@@ -348,7 +195,6 @@
       const fracao = cru - inteiro;
       return fracao > 0.5 ? inteiro + 1 : inteiro;
     }
-
     function minimo10(qe) { return Math.ceil(qe * 0.1); }
     function minimo20(qe) { return Math.ceil(qe * 0.2); }
     function limiar80(qe) { return Math.ceil(qe * 0.8); }
@@ -359,7 +205,6 @@
 
     function calcular(input) {
       const { votosValidos, vagas, partidoVotos, candidatoVotos } = input;
-
       const qe = calcularQE(votosValidos, vagas);
       const qp = calcularQP(partidoVotos, qe);
       const min10 = minimo10(qe);
@@ -429,13 +274,51 @@
     }
 
     // ===== Interface =====
+    const ufSelect = document.getElementById("uf");
+    const cargoSelect = document.getElementById("cargo");
     const form = document.getElementById("form");
     const resultadoEl = document.getElementById("resultado");
     const badgeEl = document.getElementById("badge");
     const numsEl = document.getElementById("nums");
     const explicacaoEl = document.getElementById("explicacao");
     const baseLegalEl = document.getElementById("baseLegal");
-    const cargoSelect = document.getElementById("cargo");
+
+    // Preenche o select de UFs
+    Object.keys(dados2022).sort((a, b) => dados2022[a].nome.localeCompare(dados2022[b].nome)).forEach(sigla => {
+      const opt = document.createElement("option");
+      opt.value = sigla;
+      opt.textContent = dados2022[sigla].nome + " (" + sigla + ")";
+      if (sigla === "ES") opt.selected = true;
+      ufSelect.appendChild(opt);
+    });
+
+    function atualizarCampos() {
+      const uf = ufSelect.value;
+      const cargo = cargoSelect.value;
+      const d = dados2022[uf];
+      if (!d) return;
+
+      const vagas = cargo === "depfederal" ? d.federal : d.estadual;
+      document.getElementById("vagas").value = vagas;
+      document.getElementById("votosValidos").value = d.votos;
+      document.getElementById("hintVagas").textContent =
+        cargo === "depfederal"
+          ? `${vagas} vagas de deputado federal em ${d.nome}`
+          : `${vagas} vagas de deputado estadual/distrital em ${d.nome}`;
+
+      // Valores de exemplo proporcionais ao tamanho do eleitorado
+      const fator = d.votos / 2084430; // base ES
+      document.getElementById("partidoVotos").value = Math.round((cargo === "depfederal" ? 180000 : 95000) * fator);
+      document.getElementById("candidatoVotos").value = Math.round((cargo === "depfederal" ? 35000 : 12000) * fator);
+
+      resultadoEl.classList.remove("visible");
+    }
+
+    ufSelect.addEventListener("change", atualizarCampos);
+    cargoSelect.addEventListener("change", atualizarCampos);
+
+    // Inicializa
+    atualizarCampos();
 
     const labelsEtapa = {
       vagas_diretas: { texto: "Chance de vaga direta", classe: "badge-diretas" },
@@ -444,38 +327,21 @@
       nenhuma: { texto: "Sem elegibilidade mínima aparente", classe: "badge-nenhuma" }
     };
 
-    // Ao trocar o cargo, preenche valores de exemplo
-    cargoSelect.addEventListener("change", function () {
-      const ex = exemplos[this.value];
-      if (!ex) return;
-      document.getElementById("vagas").value = ex.vagas;
-      document.getElementById("votosValidos").value = ex.votosValidos;
-      document.getElementById("partidoVotos").value = ex.partidoVotos;
-      document.getElementById("candidatoVotos").value = ex.candidatoVotos;
-      document.getElementById("hintVagas").textContent = ex.hint;
-      resultadoEl.classList.remove("visible");
-    });
-
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-
       const input = {
         vagas: Number(document.getElementById("vagas").value),
         votosValidos: Number(document.getElementById("votosValidos").value),
         partidoVotos: Number(document.getElementById("partidoVotos").value),
         candidatoVotos: Number(document.getElementById("candidatoVotos").value)
       };
-
       if (input.vagas <= 0 || input.votosValidos <= 0) {
         alert("Informe número de vagas e votos válidos maiores que zero.");
         return;
       }
-
       const r = calcular(input);
-
       const info = labelsEtapa[r.etapaPossivel] || labelsEtapa.nenhuma;
       badgeEl.innerHTML = `<span class="badge ${info.classe}">${info.texto}</span>`;
-
       numsEl.innerHTML = `
         <div class="num-box"><div class="label">QE</div><div class="value">${r.qe.toLocaleString("pt-BR")}</div></div>
         <div class="num-box"><div class="label">QP do partido</div><div class="value">${r.qp}</div></div>
@@ -483,25 +349,16 @@
         <div class="num-box"><div class="label">Mín. 20%</div><div class="value">${r.minimo20.toLocaleString("pt-BR")}</div></div>
         <div class="num-box"><div class="label">Limiar 80%</div><div class="value">${r.limiar80.toLocaleString("pt-BR")}</div></div>
       `;
-
       explicacaoEl.innerHTML = r.explicacao.map(t => `<li>${t}</li>`).join("");
       baseLegalEl.innerHTML = r.baseLegal.map(t => `<li>${t}</li>`).join("");
-
       resultadoEl.classList.add("visible");
       resultadoEl.scrollIntoView({ behavior: "smooth", block: "start" });
     });
 
     document.getElementById("btnLimpar").addEventListener("click", function () {
-      form.reset();
-      document.getElementById("uf").value = "ES";
+      ufSelect.value = "ES";
       cargoSelect.value = "depestadual";
-      const ex = exemplos.depestadual;
-      document.getElementById("vagas").value = ex.vagas;
-      document.getElementById("votosValidos").value = ex.votosValidos;
-      document.getElementById("partidoVotos").value = ex.partidoVotos;
-      document.getElementById("candidatoVotos").value = ex.candidatoVotos;
-      document.getElementById("hintVagas").textContent = ex.hint;
-      resultadoEl.classList.remove("visible");
+      atualizarCampos();
     });
   </script>
 </body>
