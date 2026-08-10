@@ -103,10 +103,6 @@
       box-shadow: 0 0 0 3px rgba(11, 95, 255, 0.15);
     }
 
-    .full {
-      grid-column: 1 / -1;
-    }
-
     .hint {
       font-size: 0.8rem;
       color: #777;
@@ -274,7 +270,7 @@
           <div>
             <label for="vagas">Número de vagas</label>
             <input type="number" id="vagas" min="1" value="30" required />
-            <div class="hint">Ex: 30 (ES estadual), 10 (ES federal)</div>
+            <div class="hint" id="hintVagas">Ex: 30 (ES estadual), 10 (ES federal)</div>
           </div>
           <div>
             <label for="votosValidos">Votos válidos totais</label>
@@ -319,7 +315,32 @@
   </div>
 
   <script>
-    // ===== Motor de cálculo (mesmas regras do TypeScript) =====
+    // ===== Exemplos prontos por cargo (valores aproximados para o ES) =====
+    const exemplos = {
+      depestadual: {
+        vagas: 30,
+        votosValidos: 2300000,
+        partidoVotos: 95000,
+        candidatoVotos: 12000,
+        hint: "Ex: 30 vagas no Espírito Santo"
+      },
+      depfederal: {
+        vagas: 10,
+        votosValidos: 2300000,
+        partidoVotos: 180000,
+        candidatoVotos: 35000,
+        hint: "Ex: 10 vagas no Espírito Santo"
+      },
+      vereador: {
+        vagas: 15,
+        votosValidos: 180000,
+        partidoVotos: 12000,
+        candidatoVotos: 1800,
+        hint: "Exemplo genérico de município médio"
+      }
+    };
+
+    // ===== Motor de cálculo =====
     function calcularQE(votosValidos, vagas) {
       if (vagas <= 0) return 0;
       const cru = votosValidos / vagas;
@@ -414,6 +435,7 @@
     const numsEl = document.getElementById("nums");
     const explicacaoEl = document.getElementById("explicacao");
     const baseLegalEl = document.getElementById("baseLegal");
+    const cargoSelect = document.getElementById("cargo");
 
     const labelsEtapa = {
       vagas_diretas: { texto: "Chance de vaga direta", classe: "badge-diretas" },
@@ -421,6 +443,18 @@
       sobras_2: { texto: "Chance apenas na fase final de sobras", classe: "badge-sobras2" },
       nenhuma: { texto: "Sem elegibilidade mínima aparente", classe: "badge-nenhuma" }
     };
+
+    // Ao trocar o cargo, preenche valores de exemplo
+    cargoSelect.addEventListener("change", function () {
+      const ex = exemplos[this.value];
+      if (!ex) return;
+      document.getElementById("vagas").value = ex.vagas;
+      document.getElementById("votosValidos").value = ex.votosValidos;
+      document.getElementById("partidoVotos").value = ex.partidoVotos;
+      document.getElementById("candidatoVotos").value = ex.candidatoVotos;
+      document.getElementById("hintVagas").textContent = ex.hint;
+      resultadoEl.classList.remove("visible");
+    });
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -439,11 +473,9 @@
 
       const r = calcular(input);
 
-      // Badge
       const info = labelsEtapa[r.etapaPossivel] || labelsEtapa.nenhuma;
       badgeEl.innerHTML = `<span class="badge ${info.classe}">${info.texto}</span>`;
 
-      // Números
       numsEl.innerHTML = `
         <div class="num-box"><div class="label">QE</div><div class="value">${r.qe.toLocaleString("pt-BR")}</div></div>
         <div class="num-box"><div class="label">QP do partido</div><div class="value">${r.qp}</div></div>
@@ -452,10 +484,7 @@
         <div class="num-box"><div class="label">Limiar 80%</div><div class="value">${r.limiar80.toLocaleString("pt-BR")}</div></div>
       `;
 
-      // Explicação
       explicacaoEl.innerHTML = r.explicacao.map(t => `<li>${t}</li>`).join("");
-
-      // Base legal
       baseLegalEl.innerHTML = r.baseLegal.map(t => `<li>${t}</li>`).join("");
 
       resultadoEl.classList.add("visible");
@@ -465,10 +494,13 @@
     document.getElementById("btnLimpar").addEventListener("click", function () {
       form.reset();
       document.getElementById("uf").value = "ES";
-      document.getElementById("vagas").value = 30;
-      document.getElementById("votosValidos").value = 2300000;
-      document.getElementById("partidoVotos").value = 95000;
-      document.getElementById("candidatoVotos").value = 12000;
+      cargoSelect.value = "depestadual";
+      const ex = exemplos.depestadual;
+      document.getElementById("vagas").value = ex.vagas;
+      document.getElementById("votosValidos").value = ex.votosValidos;
+      document.getElementById("partidoVotos").value = ex.partidoVotos;
+      document.getElementById("candidatoVotos").value = ex.candidatoVotos;
+      document.getElementById("hintVagas").textContent = ex.hint;
       resultadoEl.classList.remove("visible");
     });
   </script>
