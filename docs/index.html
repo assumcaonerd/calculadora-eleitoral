@@ -82,6 +82,24 @@
       background: #fff8e6; border: 1px solid #f0d78c; border-radius: 8px;
       padding: 12px 14px; font-size: 0.85rem; color: #6b5200; margin-top: 16px;
     }
+    .historico-table {
+      width: 100%; border-collapse: collapse; font-size: 0.9rem; margin-top: 8px;
+    }
+    .historico-table th, .historico-table td {
+      padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border);
+    }
+    .historico-table th { font-weight: 600; color: var(--muted); font-size: 0.8rem; }
+    .historico-table tr:last-child td { border-bottom: none; }
+    .historico-table .cadeiras { font-weight: 700; text-align: center; }
+    .historico-vazio {
+      color: var(--muted); font-size: 0.9rem; padding: 12px 0;
+    }
+    .viabilidade {
+      display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600;
+    }
+    .viabilidade-alta { background: #d1f7d6; color: var(--success); }
+    .viabilidade-media { background: #fff3cd; color: var(--warning); }
+    .viabilidade-baixa { background: #fce8e6; color: var(--danger); }
   </style>
 </head>
 <body>
@@ -134,6 +152,16 @@
       </form>
     </div>
 
+    <div class="card" id="historicoCard">
+      <h2>Histórico 2022 – Desempenho dos partidos</h2>
+      <p style="font-size:0.9rem;color:var(--muted);margin-bottom:12px;" id="historicoSubtitulo">
+        Bancada eleita na última eleição. Ajuda a responder: “esse partido é viável neste estado?”
+      </p>
+      <div id="historicoConteudo">
+        <p class="historico-vazio">Selecione o estado e o cargo para ver o histórico.</p>
+      </div>
+    </div>
+
     <div class="card" id="resultado">
       <h2>Resultado</h2>
       <div id="badge"></div>
@@ -155,8 +183,6 @@
   </div>
 
   <script>
-    // Dados oficiais 2022 – votos válidos para Deputado Federal (TSE)
-    // Fonte: Informação SMG nº 8/2023 do TSE
     const dados2022 = {
       AC: { nome: "Acre", federal: 8, estadual: 24, votos: 434253 },
       AL: { nome: "Alagoas", federal: 9, estadual: 27, votos: 1650763 },
@@ -187,7 +213,93 @@
       TO: { nome: "Tocantins", federal: 8, estadual: 24, votos: 830140 }
     };
 
-    // ===== Motor de cálculo =====
+    const historico2022 = {
+      ES: {
+        estadual: [
+          { partido: "PL", cadeiras: 5, observacao: "Maior bancada" },
+          { partido: "Republicanos", cadeiras: 4, observacao: "" },
+          { partido: "PODE", cadeiras: 3, observacao: "" },
+          { partido: "PSB", cadeiras: 3, observacao: "" },
+          { partido: "PDT", cadeiras: 2, observacao: "" },
+          { partido: "PP", cadeiras: 2, observacao: "" },
+          { partido: "PSDB", cadeiras: 2, observacao: "" },
+          { partido: "PT", cadeiras: 2, observacao: "" },
+          { partido: "UNIÃO", cadeiras: 2, observacao: "" },
+          { partido: "Cidadania", cadeiras: 1, observacao: "" },
+          { partido: "Patriota", cadeiras: 1, observacao: "" },
+          { partido: "PSC", cadeiras: 1, observacao: "" },
+          { partido: "PSOL", cadeiras: 1, observacao: "" },
+          { partido: "PTB", cadeiras: 1, observacao: "" }
+        ],
+        federal: [
+          { partido: "PT", cadeiras: 2, observacao: "" },
+          { partido: "PP", cadeiras: 2, observacao: "" },
+          { partido: "PODE", cadeiras: 2, observacao: "" },
+          { partido: "Republicanos", cadeiras: 2, observacao: "" },
+          { partido: "PL", cadeiras: 1, observacao: "" },
+          { partido: "PSB", cadeiras: 1, observacao: "" }
+        ]
+      }
+    };
+
+    function classificarViabilidade(cadeiras) {
+      if (cadeiras >= 3) return { texto: "Alta", classe: "viabilidade-alta" };
+      if (cadeiras === 2) return { texto: "Média", classe: "viabilidade-media" };
+      if (cadeiras === 1) return { texto: "Baixa", classe: "viabilidade-baixa" };
+      return { texto: "Nenhuma", classe: "viabilidade-baixa" };
+    }
+
+    function renderHistorico(uf, cargo) {
+      const container = document.getElementById("historicoConteudo");
+      const subtitulo = document.getElementById("historicoSubtitulo");
+      const d = dados2022[uf];
+      const hist = historico2022[uf];
+
+      if (!hist) {
+        container.innerHTML = `<p class="historico-vazio">Histórico detalhado ainda não disponível para ${d ? d.nome : uf}. Em breve expandiremos para todos os estados.</p>`;
+        subtitulo.textContent = "Bancada eleita na última eleição. Ajuda a responder: “esse partido é viável neste estado?”";
+        return;
+      }
+
+      const lista = cargo === "depfederal" ? hist.federal : hist.estadual;
+      const totalVagas = cargo === "depfederal" ? d.federal : d.estadual;
+      const nomeCargo = cargo === "depfederal" ? "Deputado Federal" : "Deputado Estadual";
+
+      subtitulo.textContent = `${nomeCargo} em ${d.nome} – ${totalVagas} vagas em 2022. Partidos que conquistaram cadeiras:`;
+
+      if (!lista || lista.length === 0) {
+        container.innerHTML = `<p class="historico-vazio">Sem dados de bancada para este cargo.</p>`;
+        return;
+      }
+
+      let html = `<table class="historico-table">
+        <thead>
+          <tr>
+            <th>Partido</th>
+            <th style="text-align:center">Cadeiras</th>
+            <th>Viabilidade 2022</th>
+          </tr>
+        </thead>
+        <tbody>`;
+
+      lista.forEach(item => {
+        const v = classificarViabilidade(item.cadeiras);
+        html += `<tr>
+          <td>${item.partido}</td>
+          <td class="cadeiras">${item.cadeiras}</td>
+          <td><span class="viabilidade ${v.classe}">${v.texto}</span></td>
+        </tr>`;
+      });
+
+      html += `</tbody></table>
+        <p style="font-size:0.8rem;color:var(--muted);margin-top:12px;">
+          “Viabilidade” aqui é uma leitura simples com base no número de cadeiras conquistadas em 2022.
+          Alta = 3 ou mais; Média = 2; Baixa = 1. Partidos sem cadeira em 2022 não aparecem na lista.
+        </p>`;
+
+      container.innerHTML = html;
+    }
+
     function calcularQE(votosValidos, vagas) {
       if (vagas <= 0) return 0;
       const cru = votosValidos / vagas;
@@ -273,7 +385,6 @@
       };
     }
 
-    // ===== Interface =====
     const ufSelect = document.getElementById("uf");
     const cargoSelect = document.getElementById("cargo");
     const form = document.getElementById("form");
@@ -283,7 +394,6 @@
     const explicacaoEl = document.getElementById("explicacao");
     const baseLegalEl = document.getElementById("baseLegal");
 
-    // Preenche o select de UFs
     Object.keys(dados2022).sort((a, b) => dados2022[a].nome.localeCompare(dados2022[b].nome)).forEach(sigla => {
       const opt = document.createElement("option");
       opt.value = sigla;
@@ -306,18 +416,17 @@
           ? `${vagas} vagas de deputado federal em ${d.nome}`
           : `${vagas} vagas de deputado estadual/distrital em ${d.nome}`;
 
-      // Valores de exemplo proporcionais ao tamanho do eleitorado
-      const fator = d.votos / 2084430; // base ES
+      const fator = d.votos / 2084430;
       document.getElementById("partidoVotos").value = Math.round((cargo === "depfederal" ? 180000 : 95000) * fator);
       document.getElementById("candidatoVotos").value = Math.round((cargo === "depfederal" ? 35000 : 12000) * fator);
 
       resultadoEl.classList.remove("visible");
+      renderHistorico(uf, cargo);
     }
 
     ufSelect.addEventListener("change", atualizarCampos);
     cargoSelect.addEventListener("change", atualizarCampos);
 
-    // Inicializa
     atualizarCampos();
 
     const labelsEtapa = {
