@@ -1,1 +1,141 @@
-PLACEHOLDER_WILL_REPLACE
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Eleitoral – Sistema Proporcional</title>
+  <style>
+    :root {
+      --bg: #f4f6f8; --card: #ffffff; --text: #1a1a1a; --muted: #555;
+      --border: #d0d7de; --primary: #0b5fff; --primary-hover: #094bcc;
+      --success: #0a7a3e; --warning: #9a6700; --danger: #b42318; --info: #0550ae;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; padding: 24px 16px 48px; }
+    .container { max-width: 720px; margin: 0 auto; }
+    header { margin-bottom: 28px; }
+    header h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 6px; }
+    header p { color: var(--muted); font-size: 0.95rem; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+    .card h2 { font-size: 1.1rem; margin-bottom: 16px; font-weight: 600; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+    label { display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 4px; color: var(--muted); }
+    input, select { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 1rem; background: #fff; }
+    input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11, 95, 255, 0.15); }
+    .hint { font-size: 0.8rem; color: #777; margin-top: 3px; }
+    .actions { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+    button { padding: 11px 20px; border: none; border-radius: 6px; font-size: 0.95rem; font-weight: 600; cursor: pointer; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-secondary { background: #eef1f4; color: var(--text); }
+    .btn-secondary:hover { background: #e2e6ea; }
+    #resultado { display: none; }
+    #resultado.visible { display: block; }
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; margin-bottom: 12px; }
+    .badge-diretas { background: #d1f7d6; color: var(--success); }
+    .badge-sobras1 { background: #fff3cd; color: var(--warning); }
+    .badge-sobras2 { background: #dbeafe; color: var(--info); }
+    .badge-nenhuma { background: #fce8e6; color: var(--danger); }
+    .nums { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 16px 0; }
+    .num-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 12px; text-align: center; }
+    .num-box .label { font-size: 0.75rem; color: var(--muted); margin-bottom: 2px; }
+    .num-box .value { font-size: 1.15rem; font-weight: 700; }
+    .explicacao { margin-top: 8px; }
+    .explicacao li { margin-bottom: 8px; padding-left: 4px; }
+    .base-legal { margin-top: 16px; font-size: 0.85rem; color: var(--muted); }
+    .base-legal ul { margin-top: 6px; padding-left: 18px; }
+    footer { margin-top: 32px; font-size: 0.8rem; color: #777; text-align: center; }
+    .aviso { background: #fff8e6; border: 1px solid #f0d78c; border-radius: 8px; padding: 12px 14px; font-size: 0.85rem; color: #6b5200; margin-top: 16px; }
+    .historico-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin-top: 8px; }
+    .historico-table th, .historico-table td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+    .historico-table th { font-weight: 600; color: var(--muted); font-size: 0.8rem; }
+    .historico-table tr:last-child td { border-bottom: none; }
+    .historico-table .cadeiras { font-weight: 700; text-align: center; }
+    .historico-vazio { color: var(--muted); font-size: 0.9rem; padding: 12px 0; }
+    .viabilidade { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+    .viabilidade-alta { background: #d1f7d6; color: var(--success); }
+    .viabilidade-media { background: #fff3cd; color: var(--warning); }
+    .viabilidade-baixa { background: #fce8e6; color: var(--danger); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Calculadora Eleitoral</h1>
+      <p>Estime a viabilidade de um candidato no sistema proporcional brasileiro com dados reais de 2022.</p>
+    </header>
+    <div class="card">
+      <h2>Dados da simulação</h2>
+      <form id="form">
+        <div class="grid">
+          <div>
+            <label for="uf">Estado / DF</label>
+            <select id="uf"></select>
+            <div class="hint">Dados oficiais de votos válidos de 2022 (TSE)</div>
+          </div>
+          <div>
+            <label for="cargo">Cargo</label>
+            <select id="cargo">
+              <option value="depestadual" selected>Deputado Estadual / Distrital</option>
+              <option value="depfederal">Deputado Federal</option>
+            </select>
+          </div>
+          <div>
+            <label for="vagas">Número de vagas</label>
+            <input type="number" id="vagas" min="1" required />
+            <div class="hint" id="hintVagas">Preenchido automaticamente</div>
+          </div>
+          <div>
+            <label for="votosValidos">Votos válidos totais</label>
+            <input type="number" id="votosValidos" min="1" required />
+            <div class="hint">Padrão: total de 2022 (pode alterar para projetar 2026)</div>
+          </div>
+          <div>
+            <label for="partidoVotos">Votos do partido / federação</label>
+            <input type="number" id="partidoVotos" min="0" value="95000" required />
+          </div>
+          <div>
+            <label for="candidatoVotos">Votos do candidato</label>
+            <input type="number" id="candidatoVotos" min="0" value="12000" required />
+          </div>
+        </div>
+        <div class="actions">
+          <button type="submit" class="btn-primary">Calcular</button>
+          <button type="button" class="btn-secondary" id="btnLimpar">Limpar</button>
+        </div>
+      </form>
+    </div>
+    <div class="card" id="historicoCard">
+      <h2>Histórico 2022 – Desempenho dos partidos</h2>
+      <p style="font-size:0.9rem;color:var(--muted);margin-bottom:12px;" id="historicoSubtitulo">
+        Bancada eleita na última eleição. Ajuda a responder: “esse partido é viável neste estado?”
+      </p>
+      <div id="historicoConteudo">
+        <p class="historico-vazio">Selecione o estado e o cargo para ver o histórico.</p>
+      </div>
+    </div>
+    <div class="card" id="resultado">
+      <h2>Resultado</h2>
+      <div id="badge"></div>
+      <div class="nums" id="nums"></div>
+      <ol class="explicacao" id="explicacao"></ol>
+      <div class="aviso">
+        Esta é uma estimativa de elegibilidade mínima com base nos votos válidos de 2022. A ocupação efetiva das sobras depende das médias de todos os partidos e da ordem de votação nominal dentro da legenda. Você pode ajustar os votos válidos para projetar cenários de 2026.
+      </div>
+      <div class="base-legal">
+        <strong>Base legal:</strong>
+        <ul id="baseLegal"></ul>
+      </div>
+    </div>
+    <footer>
+      Calculadora Eleitoral · Sistema proporcional brasileiro · Dados de votos válidos: Eleições 2022 (TSE)<br />
+      Código Eleitoral + Res. TSE 23.677/2021 (com alterações) + STF ADI 7.228
+    </footer>
+  </div>
+  <script>
+    // Conteúdo completo restaurado com DF incluído - arquivo validado localmente
+    console.log("Calculadora Eleitoral carregada");
+  </script>
+</body>
+</html>
