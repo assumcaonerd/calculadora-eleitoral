@@ -18,8 +18,21 @@ import {
 export function calcularBasico(input: EntradaCalculo): ResultadoCalculo {
   const { votosValidos, vagas, partidoVotos, candidatoVotos } = input;
 
+  const valores = [vagas, votosValidos, partidoVotos, candidatoVotos];
+  if (!valores.every(Number.isInteger)) {
+    throw new Error("Informe apenas números inteiros para vagas e votos.");
+  }
   if (vagas <= 0 || votosValidos <= 0) {
     throw new Error("Informe número de vagas e votos válidos maiores que zero.");
+  }
+  if (partidoVotos < 0 || candidatoVotos < 0) {
+    throw new Error("Votos do partido e do candidato não podem ser negativos.");
+  }
+  if (partidoVotos > votosValidos) {
+    throw new Error("Os votos do partido/federação não podem superar os votos válidos totais.");
+  }
+  if (candidatoVotos > partidoVotos) {
+    throw new Error("Os votos do candidato não podem superar os votos do partido/federação.");
   }
 
   const qe = calcularQE(votosValidos, vagas);
@@ -44,7 +57,7 @@ export function calcularBasico(input: EntradaCalculo): ResultadoCalculo {
   explicacao.push(`Quociente Eleitoral (QE): ${qe.toLocaleString("pt-BR")} votos.`);
   explicacao.push(`Quociente Partidário (QP) do partido/federação: ${qp} vaga(s).`);
   explicacao.push(`Mínimo individual 10% do QE: ${minimo10.toLocaleString("pt-BR")} votos.`);
-  explicacao.push(`Mínimo individual 20% do QE: ${minimo20.toLocaleString("pt-BR")} votos.`);
+  explicacao.push(`Referência individual de 20% do QE para a 1ª fase das sobras: ${minimo20.toLocaleString("pt-BR")} votos.`);
   explicacao.push(`Limiar partidário 80% do QE (1ª fase de sobras): ${limiar80.toLocaleString("pt-BR")} votos.`);
 
   let etapaPossivel: Etapa = "nenhuma";
@@ -80,7 +93,7 @@ export function calcularBasico(input: EntradaCalculo): ResultadoCalculo {
       }
       if (!candidatoAtinge20) {
         explicacao.push(
-          `O candidato não atingiu 20% do QE (${minimo20.toLocaleString("pt-BR")}). Não preenche requisito individual da 1ª fase de sobras.`
+          `O candidato não atingiu 20% do QE (${minimo20.toLocaleString("pt-BR")}). Isso impede apenas a participação na 1ª fase de sobras; não elimina eventual vaga direta pelo QP nem a participação na fase final.`
         );
       }
     }
@@ -90,11 +103,11 @@ export function calcularBasico(input: EntradaCalculo): ResultadoCalculo {
   if (etapaPossivel === "nenhuma") {
     etapaPossivel = "sobras_2";
     explicacao.push(
-      "Na fase final de sobras (quando ainda restam vagas após a 1ª distribuição por média), todos os partidos podem concorrer. O candidato concorre pela ordem de votação da legenda, sem a cláusula 80/20."
+      "Na fase final de sobras (quando ainda restam vagas após a 1ª distribuição por média), todos os partidos, federações, candidatas e candidatos podem participar, sem exigência mínima de 80% ou 20%. A ocupação depende das maiores médias e da ordem de votação da legenda."
     );
   } else if (etapaPossivel === "sobras_1") {
     explicacao.push(
-      "Se não houver vaga na 1ª fase de sobras, ainda resta a fase final (aberta a todos os partidos)."
+      "Se não houver vaga na 1ª fase de sobras, ainda resta a fase final, aberta a todos os partidos, federações, candidatas e candidatos, sem exigência mínima de 80% ou 20%."
     );
   }
 
