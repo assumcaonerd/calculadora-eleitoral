@@ -7,7 +7,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js",
-    "test": "node --test dist/tests/engine.test.js"
+    "test": "node --test dist/tests/engine.test.js && npm run validate:web",
+    "validate:web": "node scripts/validate-html.mjs"
   },
   "keywords": [
     "quociente-eleitoral",
@@ -21,6 +22,7 @@
   "author": "assumcaonerd",
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "^26.2.0",
     "typescript": "^5.5.4"
   }
 }

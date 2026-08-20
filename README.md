@@ -24,6 +24,8 @@ npx serve docs
 
 A página é auto-contida (HTML + CSS + JavaScript). Não precisa de build nem de internet depois de aberta.
 
+O histórico detalhado de cadeiras por partido está disponível para **todos os 26 estados e o Distrito Federal**, nos cargos de deputado estadual/distrital e deputado federal, com base nos resultados de 2022.
+
 ## Base legal atualizada
 
 - Código Eleitoral (Lei 4.737/1965), arts. 106 a 109 e 111
@@ -57,6 +59,16 @@ npm run build
 npm start
 ```
 
+### Executar os testes
+
+A suíte automatizada cobre o arredondamento do QE, o QP, os limiares de 10%, 20% e 80%, as três etapas de elegibilidade e as validações de consistência dos votos:
+
+```bash
+npm test
+```
+
+O comando pressupõe que o projeto tenha sido compilado com `npm run build`.
+
 ### Usar no seu código
 
 ```ts
@@ -88,14 +100,16 @@ console.log(resultado.explicacao);
 
 ### O que o resultado traz
 
-- `qe`, `qp`, `minimo10`, `minimo20`, `limiar80`
+- `qe`, `qp`, `vagasDiretasDoPartido`, `minimo10`, `minimo20`, `limiar80`
 - Se o partido atingiu QE e 80%
 - Se o candidato atingiu 10% e 20%
 - `etapaPossivel`: a etapa mais favorável em que ainda há chance
 - `explicacao`: textos claros em português
 - `baseLegal`: referências das normas usadas
 
-## Limitações (importante)
+## Validações e limitações (importante)
+
+O motor rejeita entradas fracionárias ou incoerentes: vagas e votos devem ser inteiros, vagas e votos válidos devem ser maiores que zero, os votos do partido/federação não podem superar os votos válidos totais e os votos nominais do candidato não podem superar os votos da própria legenda.
 
 Esta ferramenta avalia a **elegibilidade mínima** do candidato e do partido em cada etapa.  
 Ela **não simula** a disputa completa de médias entre todos os partidos (isso exigiria a lista completa de legendas e seus votos). A ocupação efetiva das sobras depende das médias relativas e da ordem de votação nominal dentro da legenda.
