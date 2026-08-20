@@ -702,7 +702,7 @@
       explicacao.push(`Quociente Eleitoral (QE): ${qe.toLocaleString("pt-BR")} votos.`);
       explicacao.push(`Quociente Partidário (QP) do partido/federação: ${qp} vaga(s).`);
       explicacao.push(`Mínimo individual 10% do QE: ${min10.toLocaleString("pt-BR")} votos.`);
-      explicacao.push(`Mínimo individual 20% do QE: ${min20.toLocaleString("pt-BR")} votos.`);
+      explicacao.push(`Referência individual de 20% do QE para a 1ª fase das sobras: ${min20.toLocaleString("pt-BR")} votos.`);
       explicacao.push(`Limiar partidário 80% do QE (1ª fase de sobras): ${lim80.toLocaleString("pt-BR")} votos.`);
       let etapa = "nenhuma";
       if (partidoAtingiuQE && candidatoAtinge10) {
@@ -719,14 +719,14 @@
           explicacao.push("Partido ≥ 80% do QE e candidato ≥ 20% do QE: apto à 1ª fase de sobras.");
         } else {
           if (!partidoAtingiu80) explicacao.push(`O partido não atingiu 80% do QE (${lim80.toLocaleString("pt-BR")}).`);
-          if (!candidatoAtinge20) explicacao.push(`O candidato não atingiu 20% do QE (${min20.toLocaleString("pt-BR")}).`);
+          if (!candidatoAtinge20) explicacao.push(`O candidato não atingiu 20% do QE (${min20.toLocaleString("pt-BR")}). Isso impede apenas a participação na 1ª fase de sobras; não elimina eventual vaga direta pelo QP nem a participação na fase final.`);
         }
       }
       if (etapa === "nenhuma") {
         etapa = "sobras_2";
-        explicacao.push("Na fase final de sobras todos os partidos podem concorrer.");
+        explicacao.push("Na fase final de sobras, todos os partidos, federações, candidatas e candidatos podem participar, sem exigência mínima de 80% ou 20%; a ocupação depende das maiores médias e da ordem de votação da legenda.");
       } else if (etapa === "sobras_1") {
-        explicacao.push("Se não houver vaga na 1ª fase de sobras, ainda resta a fase final.");
+        explicacao.push("Se não houver vaga na 1ª fase de sobras, ainda resta a fase final, aberta a todos os partidos, federações, candidatas e candidatos, sem exigência mínima de 80% ou 20%.");
       }
       explicacao.push("Atenção: esta é uma estimativa de elegibilidade mínima.");
       return { qe, qp, minimo10: min10, minimo20: min20, limiar80: lim80, partidoAtingiuQE, partidoAtingiu80, vagasDiretasDoPartido: qp, candidatoAtinge10, candidatoAtinge20, etapaPossivel: etapa, explicacao, baseLegal };
@@ -798,7 +798,7 @@
         <div class="num-box"><div class="label">QP do partido</div><div class="value">${r.qp}</div></div>
         <div class="num-box"><div class="label">Vagas diretas</div><div class="value">${r.vagasDiretasDoPartido}</div></div>
         <div class="num-box"><div class="label">Mín. 10%</div><div class="value">${r.minimo10.toLocaleString("pt-BR")}</div></div>
-        <div class="num-box"><div class="label">Mín. 20%</div><div class="value">${r.minimo20.toLocaleString("pt-BR")}</div></div>
+        <div class="num-box"><div class="label">20% · 1ª sobra</div><div class="value">${r.minimo20.toLocaleString("pt-BR")}</div></div>
         <div class="num-box"><div class="label">Limiar 80%</div><div class="value">${r.limiar80.toLocaleString("pt-BR")}</div></div>`;
       explicacaoEl.innerHTML = r.explicacao.map(t => `<li>${t}</li>`).join("");
       baseLegalEl.innerHTML = r.baseLegal.map(t => `<li>${t}</li>`).join("");
